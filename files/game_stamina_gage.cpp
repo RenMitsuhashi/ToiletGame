@@ -1,6 +1,7 @@
 #include "game_stamina_gage.h"
 #include "input.h"
 #include "databox.h"
+#include "fade.h"
 
 //グローバル変数
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffStaminaGage = NULL;	//頂点バッファへのポインタ
@@ -93,6 +94,20 @@ void UpdateStaminaGage(void)
 	Data *pData;
 	pData = GetData();
 
+	if (GetKeyboardPress(DIK_RETURN) == true)
+	{
+		int nScore = 0;
+		nScore = (200 - pData->aPlayer.nGage) + (pData->aPlayer.nMoney / 10);
+
+		if (nScore <= 49)	pData->nStageRank[pData->nStage] = RANK_D;
+		if (nScore >= 50)	pData->nStageRank[pData->nStage] = RANK_C;
+		if (nScore >= 100)	pData->nStageRank[pData->nStage] = RANK_B;
+		if (nScore >= 150)	pData->nStageRank[pData->nStage] = RANK_A;
+		if (nScore >= 200)	pData->nStageRank[pData->nStage] = RANK_S;
+
+		SetFade(MODE_RESULT);
+	}
+
 	if (GetKeyboardPress(DIK_LSHIFT) == true && bStaminaHeal == false)
 	{
 		nStaminaCount--;
@@ -120,6 +135,7 @@ void UpdateStaminaGage(void)
 		{
 			bStaminaHeal = false;
 			nStaminaCount = 190;
+			nColor2 = 255;
 		}
 
 		pData->aPlayer.nMove = MOVE_WALK;

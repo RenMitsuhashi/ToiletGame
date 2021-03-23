@@ -49,7 +49,7 @@ typedef enum
 
 typedef struct
 {
-	int nGage;		//膀胱ゲージの量(1秒に1増加、MAX180)
+	int nGage;		//膀胱ゲージの量(1秒に1増加、MAX200)
 	int nStamina;	//スタミナの量
 	bool bKey;		//鍵を所有しているかどうか
 	int nMoney;		//残金
@@ -75,6 +75,7 @@ typedef struct
 
 //プロトタイプ宣言
 void Initdata(void);		//初期化
+void Resetdata(void);		//完全初期化
 Data *GetData(void);
 
 #endif //_DATABOX_H_

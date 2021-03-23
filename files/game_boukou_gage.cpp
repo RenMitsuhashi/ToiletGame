@@ -7,7 +7,6 @@
 LPDIRECT3DVERTEXBUFFER9 g_pVtxBuffBoukouGage = NULL;	//頂点バッファへのポインタ
 LPDIRECT3DTEXTURE9 g_pTextureBoukouGage = NULL;			//テクスチャへのポインタ
 int nFrameCount = 0;									//毎フレーム1増加、60フレームでnSecCountを1増加
-int nSecCount = 0;										//毎秒1増加、200でMAX
 int nColor = 255;										//緑、青の色調
 int nOne = 5;											//計算用
 bool bLockBoukouGage = false;
@@ -64,7 +63,6 @@ void InitBoukouGage(void)
 	g_pVtxBuffBoukouGage->Unlock();
 
 	nFrameCount = 0;
-	nSecCount = 0;
 	nColor = 255;
 	nOne = 5;
 	bLockBoukouGage = false;
@@ -94,10 +92,10 @@ void UpdateBoukouGage(void)
 	Data *pData;
 	pData = GetData();
 
-	if (nSecCount >= 200)
+	if (pData->aPlayer.nGage >= 200)
 	{
 		nFrameCount = 0;
-		nSecCount = 200;
+		pData->aPlayer.nGage = 200;
 		SetFade(MODE_STAGE_SELECT);
 
 		bLockBoukouGage = true;
@@ -105,7 +103,7 @@ void UpdateBoukouGage(void)
 
 	if (pData->aPlayer.nMove == MOVE_DASH)
 	{
-		nSecCount++;
+		pData->aPlayer.nGage++;
 	}
 
 	else
@@ -115,10 +113,10 @@ void UpdateBoukouGage(void)
 		if (nFrameCount >= 60)
 		{
 			nFrameCount = 0;
-			nSecCount++;
+			pData->aPlayer.nGage++;
 		}
 
-		if (nSecCount >= 185)		//185秒経過の演出
+		if (pData->aPlayer.nGage >= 185)		//185秒経過の演出
 		{
 			nColor += nOne;
 
@@ -128,7 +126,7 @@ void UpdateBoukouGage(void)
 			nColor += nOne;
 		}
 
-		else if (nSecCount >= 150)	//150秒経過の演出
+		else if (pData->aPlayer.nGage >= 150)	//150秒経過の演出
 		{
 			if (nColor <= 192)	nOne *= -1, nColor = 192;
 			if (nColor >= 255)	nOne *= -1, nColor = 255;
@@ -143,8 +141,8 @@ void UpdateBoukouGage(void)
 	g_pVtxBuffBoukouGage->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(25.0f, 675.0f - (float)nSecCount, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(175.0f, 675.0f - (float)nSecCount, 0.0f);
+	pVtx[0].pos = D3DXVECTOR3(25.0f, 675.0f - (float)pData->aPlayer.nGage, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(175.0f, 675.0f - (float)pData->aPlayer.nGage, 0.0f);
 	pVtx[2].pos = D3DXVECTOR3(25.0f, 675.0f, 0.0f);
 	pVtx[3].pos = D3DXVECTOR3(175.0f, 675.0f, 0.0f);
 

@@ -8,6 +8,9 @@
 #include "game_boukou_gage.h"	//膀胱ゲージ
 #include "game_stamina_gage.h"	//スタミナゲージ
 #include "stage_select.h"		//ステージ選択画面
+#include "stage_select_rank.h"	//ランキング
+#include "result.h"				//リザルト
+#include "result_bg.h"			//リザルト背景
 
 //マクロ定義
 #define CLASS_NAME "WindowClass"
@@ -270,6 +273,7 @@ HRESULT Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	InitKeyboard(hInstance, hWnd);
 	InitFade(g_mode);
 	SetMode(g_mode);
+	Resetdata();
 
 	/*************************************************
 	*			各オブジェクトの初期化処理			 *
@@ -320,6 +324,7 @@ void Update(void)
 
 	case MODE_STAGE_SELECT:
 		UpdateStageSelect();
+		UpdateStageSelectRank();
 		break;
 
 	case MODE_GAME:
@@ -328,6 +333,11 @@ void Update(void)
 		UpdateBgGage();
 		UpdateBoukouGage();
 		UpdateStaminaGage();
+		break;
+
+	case MODE_RESULT:
+		UpdateResult();
+		UpdateResultBG();
 		break;
 	}
 
@@ -362,6 +372,7 @@ void Draw(void)
 
 		case MODE_STAGE_SELECT:
 			DrawStageSelect(pData->nStage);
+			DrawStageSelectRank();
 			break;
 
 		case MODE_GAME:
@@ -369,7 +380,12 @@ void Draw(void)
 			DrawBoukouGage();
 			DrawStaminaGage();
 			DrawUI();
-			break;		
+			break;
+
+		case MODE_RESULT:
+			DrawResultBG();
+			DrawResult();
+			break;
 		}
 
 		DrawFade();
@@ -414,6 +430,7 @@ void SetMode(MODE mode)
 
 	case MODE_STAGE_SELECT:
 		UninitStageSelect();
+		UninitStageSelectRank();
 		break;
 
 	case MODE_GAME:
@@ -421,6 +438,11 @@ void SetMode(MODE mode)
 		UninitBgGage();
 		UninitBoukouGage();
 		UninitStaminaGage();
+		break;
+
+	case MODE_RESULT:
+		UninitResult();
+		UninitResultBG();
 		break;
 	}
 	//---------------------------------
@@ -436,6 +458,7 @@ void SetMode(MODE mode)
 	case MODE_STAGE_SELECT:
 		InitStageSelect();
 		Initdata();
+		InitStageSelectRank();
 		break;
 
 	case MODE_GAME:
@@ -443,6 +466,11 @@ void SetMode(MODE mode)
 		InitBgGage();
 		InitBoukouGage();
 		InitStaminaGage();
+		break;
+
+	case MODE_RESULT:
+		InitResult();
+		InitResultBG();
 		break;
 	}
 	//---------------------------------
